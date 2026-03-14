@@ -1,7 +1,7 @@
 import React from 'react'
 import { testimonials } from '../assets/assets'
 import { Title } from './Title'
- export const Testimonial = () => {
+  const Testimonial = () => {
   return (
     <div className='flex flex-col items-center px-6 md:px-16 lg:px-24 bg-slate-50
     pt-20 pb-30'>
@@ -28,3 +28,5 @@ import { Title } from './Title'
                 ))}
                 </div>
                 </div>)}
+
+export default Testimonial;              
