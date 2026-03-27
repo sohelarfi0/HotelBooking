@@ -24,7 +24,7 @@ const Navbar = () => {
 
     const {openSignIn} =useClerk()
     const {user} = useUser()
-    const {navigate} = useNavigate()
+    const navigate = useNavigate()
     const location = useLocation()
 
 
@@ -94,14 +94,14 @@ const Navbar = () => {
                 </div>
 
                 {/* Mobile Menu Button */}
-                {user && <UserButton>
+                {user && <div className="md:hidden"><UserButton>
                         <UserButton.MenuItems>
                             <UserButton.Action label="My Bookings" labelIcon={<BookIcon/>}
                             onClick={()=> navigate('/my-bookings')}/>
                         </UserButton.MenuItems>
 
 
-                    </UserButton>}
+                    </UserButton></div>}
                 <div className="flex items-center gap-3 md:hidden">
                      
                      <div className={`fixed top-0 left-0 w-full h-screen bg-white text-base flex flex-col md:hidden items-center justify-center gap-6 font-medium text-gray-800 transition-all duration-500 ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}`}>
