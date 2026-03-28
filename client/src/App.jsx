@@ -6,19 +6,36 @@ import Footer from './components/Footer.jsx'
 import AllRooms from './pages/AllRooms.jsx'
 import RoomDetails from './pages/RoomDetails.jsx'
 import MyBookings from './pages/MyBookings.jsx'
-const App = () => {
+import HotelReg from './components/HotelReg.jsx'
+import LayOut from './pages/HotelOwner/LayOut.jsx'
+// import { useLocation } from 'react-router-dom'
+import Dashboard from './pages/HotelOwner/DashBoard.jsx'
+import AddRoom from './pages/HotelOwner/AddRoom.jsx'
+import ListRoom from './pages/HotelOwner/ListRoom.jsx'
 
-  const isOwnerPath = useLocation().pathname.includes("owner");
+
+const App = () => {
+  const isOwnerPath = useLocation().pathname.includes("owner")
+
 
   return (
     <div>
       {!isOwnerPath && <Navbar />}
+      {false && <HotelReg />}
+      
       <div className='min-h-[70vh]'>
         <Routes>
           <Route path='/' element={<Home/>}/>
           <Route path='/rooms' element={<AllRooms/>}/>
           <Route path='/rooms/:id' element={<RoomDetails/>}/>
           <Route path='/my-bookings' element={<MyBookings />}/>
+          {/* <Route path='/owner' element={<HotelReg />}/> */}
+          <Route path='/owner' element={<LayOut/>}>
+                 <Route index element={<Dashboard />}/>
+                 <Route path="add-room" element={<AddRoom />}/>
+                 <Route path="list-room" element={<ListRoom />}/>
+
+          </Route>
 
         </Routes>
 
