@@ -16,9 +16,9 @@ const NewsLetter = () => {
      gap-4 mt-6">
 
 
-        <input type="text" className="bg-white/80 backdrop-blur-sm px-4 py-2.5 border border-gray-200 rounded-lg 
+        <input id="newsletterEmail" name="newsletterEmail" type="email" autoComplete="email" className="bg-white/80 backdrop-blur-sm px-4 py-2.5 border border-gray-200 rounded-lg 
         outline-none max-w-66 w-full shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your email"/>
-            <button className="flex items-center justify-center gap-2 
+            <button type="button" className="flex items-center justify-center gap-2 
             group bg-gradien-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 px-4 md:px-7 py-2.5 rounded-lg active:scale-95 transition-all shadow-md text-black font-medium">
             Subscribe
             <img src={assets.arrowIcon} alt="arrow-icon" className='w-3.5 invert 

@@ -7,8 +7,8 @@ const connectDB = async () =>{
         await mongoose.connect(`${process.env.MONGODB_URI}/hotel-booking`)
 
 
-    } catch (console){
-        console.log(console.message);
+    } catch (error){
+        console.log(error.message);
  
 
     }
