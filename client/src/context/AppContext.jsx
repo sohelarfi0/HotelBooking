@@ -18,7 +18,21 @@ export const AppProvider = ({ children })=>{
     const [showHotelReg, setShowHotelReg] = useState(false);
     const [searchedCities, setSearchedCities] = useState([]);
     const [isLoadingUser, setIsLoadingUser] = useState(false);
+    const [rooms, setRooms] = useState([]);
+   
 
+    const fetchRooms = async()=>{
+        try{
+            const{data}= await axios.get('api/rooms')
+            if(data.success){
+                setRooms(data.rooms)
+            }else{
+                toast.error(data.message)
+            }
+        }catch(error){
+            toast.error(error.message)
+        }
+    }
 
     const fetchUser = useCallback(async()=>{
         try{
@@ -66,10 +80,15 @@ export const AppProvider = ({ children })=>{
         };
     },[user, fetchUser])
 
+    useEffect(()=>{
+        fetchRooms();
+    },[])
+
 
     const value = {
         currency,navigate,user, getToken,isOwner, setIsOwner, axios,
-        showHotelReg,setShowHotelReg, searchedCities, setSearchedCities, isLoadingUser
+        showHotelReg,setShowHotelReg, searchedCities, setSearchedCities, isLoadingUser,
+        rooms, setRooms
 
     }
     
