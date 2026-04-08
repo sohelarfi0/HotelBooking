@@ -1,9 +1,38 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {Title} from '../components/Title' 
-import { userBookingsDummyData , assets } from '../assets/assets'
+import {  assets } from '../assets/assets'
+import { useAppContext } from '../hooks/useAppContext.js'
+import toast from 'react-hot-toast'
 
 const MyBookings = () => {
-    const [bookings, setBookings] = useState(userBookingsDummyData);
+    const {axios, getToken, user} = useAppContext();
+    const [bookings, setBookings] = useState([]);
+
+    const fetchUserBookings = async()=>{
+        try{
+            const {data} = await axios.get('/api/bookings/user', {headers:{
+                Authorization:`Bearer ${await getToken()}`
+            }}) 
+            if(data.success)
+            {
+                setBookings(data.bookings)
+            }else{
+                toast.error(data.message)
+                
+            }
+        }catch(error){
+            toast.error(error.message)
+        }
+    }
+
+    useEffect(()=>{
+        if(user){
+            fetchUserBookings();
+        }
+    },[user])
+
+
+
   return (
     <div className='px-4 md:px-16 lg:px-24 py-20'>
       <Title title='My Bookings' subTitle='Easily manage your past, current, and upcoming hotel reservations in one place. Plan your trips seamlessly with just a few clicks' align='left' />
@@ -59,8 +88,8 @@ const MyBookings = () => {
                     <div className='flex flex-col gap-2'>
                         <span className={`px-4 py-2 rounded-lg text-white text-sm font-semibold shadow-sm ${
                             booking.isPaid
-                                ? "bg-gradient-to-r from-green-500 to-green-600"
-                                : "bg-gradient-to-r from-amber-400 to-orange-500"
+                                ? "bg-gradient from-green-500 to-green-600"
+                                : "bg-gradient from-amber-400 to-orange-500"
                         }`}>
                             {booking.isPaid ? "✓ Paid" : "⏳ Pending"}
                         </span>

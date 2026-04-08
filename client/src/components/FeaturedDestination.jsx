@@ -6,18 +6,17 @@ import { useAppContext } from '../hooks/useAppContext'
 const FeaturedDestination = () => {
    
    const {rooms, navigate} = useAppContext();
-  return rooms.length > 0 (
-
+  return (
     <div className='flex flex-col items-center px-6 
     md:px-16 lg:px-24 bg-slate-50 py-20'>
         
-        <Title title='Featured Destination' subTitle='Discover our handpicked selection of excetional properties around the world, offering unparalleled luxury and unforgettable experience.' />
+        <Title title='Featured Destination' subTitle='Discover our handpicked selection of exceptional properties around the world, offering unparalleled luxury and unforgettable experience.' />
 
         <div className='flex flex-wrap items-center 
         justify-center gap-6 mt-20'>
-            {rooms.slice(0,4).map((room, index) =>(
+            {rooms.length > 0 ? rooms.slice(0,4).map((room, index) =>(
                 <Hotelcard key={room._id} room={room} index={index}/>
-            ))}
+            )) : <p className='text-gray-500'>No featured destinations available. Rooms: {rooms.length}</p>}
         </div>
 
 
@@ -31,7 +30,6 @@ const FeaturedDestination = () => {
        View All Destinations
         </button>
     </div>
-    
   )
 }
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import {useState, useEffect, useCallback} from "react";
+import {useState, useEffect, useCallback, useRef} from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser, useAuth } from "@clerk/clerk-react";
 import {toast} from "react-hot-toast"
@@ -13,6 +13,8 @@ export const AppProvider = ({ children })=>{
     const navigate = useNavigate();
     const {user} = useUser();
     const {getToken} = useAuth();
+    const retryCountRef = useRef(0);
+    const retryTimeoutRef = useRef(null);
 
     const [isOwner, setIsOwner] = useState(false);
     const [showHotelReg, setShowHotelReg] = useState(false);
@@ -51,21 +53,28 @@ export const AppProvider = ({ children })=>{
                 `Bearer ${token}`
             }, withCredentials: true})
             if(data.success){
+                retryCountRef.current = 0;
                 setIsOwner(data.role?.toLowerCase() === "hotelowner");
                 setSearchedCities(data.recentSearchedCities)
             }else{
-                setTimeout(()=>{
-                    fetchUser()
-                },5000)
+                if (retryCountRef.current < 2) {
+                    retryCountRef.current += 1;
+                    retryTimeoutRef.current = setTimeout(fetchUser, 5000);
+                } else {
+                    toast.error(data.message || 'Unable to load user data');
+                }
             }
         }
         
         catch(error){
-            toast.error(error.response?.data?.message || error.message || 'Network error');
-            // Retry on network errors
-            setTimeout(()=>{
-                fetchUser()
-            },5000)
+            const message = error.response?.data?.message || error.message || 'Network error';
+            if (retryCountRef.current === 0) {
+                toast.error(message);
+            }
+            if (retryCountRef.current < 2) {
+                retryCountRef.current += 1;
+                retryTimeoutRef.current = setTimeout(fetchUser, 5000);
+            }
         } finally {
             setIsLoadingUser(false);
         }
@@ -76,7 +85,9 @@ export const AppProvider = ({ children })=>{
             fetchUser();
         }
         return () => {
-            // Cleanup any pending timeouts if component unmounts
+            if (retryTimeoutRef.current) {
+                clearTimeout(retryTimeoutRef.current);
+            }
         };
     },[user, fetchUser])
 
