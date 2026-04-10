@@ -1,1 +1,10 @@
+# Ignore node modules folders
 node_modules
+
+# Ignore local environment files with secrets
+.env
+client/.env
+server/.env
+.env.local
+client/.env.local
+server/.env.local
